@@ -11,129 +11,114 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{
   height:100vh;
-  background:radial-gradient(circle at top,#1a103a,#05020a 70%);
+  background:radial-gradient(circle at top,#160c2a,#05020a 70%);
   font-family:Poppins,sans-serif;
   color:#fff;
   overflow:hidden;
 }
-.card{
-  position:absolute;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
+.card{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;animation:fade 1.2s}
+@keyframes fade{from{opacity:0;transform:scale(.95)}to{opacity:1}}
 .hide{display:none}
+
 .glass{
-  width:92%;
-  max-width:480px;
-  padding:45px;
-  border-radius:36px;
+  width:92%;max-width:480px;
+  padding:45px;border-radius:34px;
   background:rgba(255,255,255,.08);
   backdrop-filter:blur(45px);
-  border:1px solid rgba(255,255,255,.2);
+  border:1px solid rgba(255,255,255,.18);
   text-align:center;
+  box-shadow:0 30px 80px rgba(0,0,0,.6);
 }
+
 h1,h2{font-family:'Playfair Display';margin-bottom:18px}
+p{opacity:.9;margin-bottom:18px}
+
 button{
-  padding:14px 38px;
-  border-radius:999px;
-  border:none;
+  padding:14px 38px;border-radius:999px;border:none;
   background:linear-gradient(135deg,#d4af37,#fff1b8,#c89b3c);
-  cursor:pointer;
+  cursor:pointer;font-size:15px;
+  box-shadow:0 18px 40px rgba(212,175,55,.8);
   margin:6px;
 }
+
 .voice,.finger{
-  width:130px;height:130px;
-  border-radius:50%;
-  border:2px solid gold;
-  font-size:48px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  margin:20px auto;
-  cursor:pointer;
+  width:130px;height:130px;border-radius:50%;
+  border:2px solid gold;font-size:48px;
+  display:flex;align-items:center;justify-content:center;
+  margin:20px auto;cursor:pointer;
 }
-.recording{background:red}
-.key{
-  position:fixed;
-  bottom:12px;
-  right:12px;
-  font-size:26px;
-  cursor:pointer;
-}
+.recording{background:red;box-shadow:0 0 30px red}
+
+.key{position:fixed;bottom:12px;right:12px;font-size:26px;cursor:pointer}
+
+/* ADMIN */
 .admin{
-  position:fixed;
-  inset:0;
-  background:#000;
-  padding:20px;
-  overflow:auto;
-  z-index:999;
+  position:fixed;inset:0;
+  background:#000;padding:20px;
+  overflow:auto;z-index:999;
 }
 .voiceItem{
   border:1px solid gold;
-  padding:12px;
-  margin-bottom:12px;
+  padding:12px;margin-bottom:12px;
   border-radius:12px;
 }
 .voiceItem button{
-  background:red;
-  color:#fff;
-  padding:6px 14px;
-  margin-left:8px;
+  background:red;color:#fff;
+  padding:6px 14px;margin-left:8px;
 }
 </style>
 </head>
 
 <body>
 
-<!-- BACKGROUND MUSIC -->
-<audio id="music" loop playsinline>
+<audio id="music" loop preload="auto" playsinline>
   <source src="https://github.com/warriorcheat/Surprise-for-my-jan/raw/refs/heads/main/music.mp3" type="audio/mpeg">
 </audio>
 
 <!-- STEP 1 -->
-<div class="card" id="s1">
+<div class="card" id="step1">
   <div class="glass">
     <h1>I love you my Jan ❤️</h1>
     <h2>Prapti, will you marry me?</h2>
     <button onclick="yes()">Yes 💍</button>
+    <button onclick="alert('Our destiny is already written ❤️')">No ❌</button>
   </div>
 </div>
 
 <!-- STEP 2 -->
-<div class="card hide" id="s2">
+<div class="card hide" id="step2">
   <div class="glass">
     <h2>Say Kobul ❤️</h2>
+    <p>You can record multiple times</p>
     <div class="voice" id="mic">🎤</div>
-    <button onclick="next()">Continue</button>
+    <button onclick="toFinger()">Continue</button>
   </div>
 </div>
 
 <!-- STEP 3 -->
-<div class="card hide" id="s3">
+<div class="card hide" id="step3">
   <div class="glass">
     <h2>Place Your Finger 🖐️</h2>
-    <div class="finger" onclick="done()">🖐️</div>
+    <div class="finger" onclick="complete()">🖐️</div>
   </div>
 </div>
 
 <!-- STEP 4 -->
-<div class="card hide" id="s4">
+<div class="card hide" id="step4">
   <div class="glass">
     <h2 style="color:gold">Marriage Complete 💍</h2>
-    <button onclick="alert('Forever ❤️')">Download Certificate</button>
+    <p><b>Abdullah</b> & <b>Prapti</b></p>
+    <button onclick="downloadCert()">Download Marriage Certificate</button>
   </div>
 </div>
 
 <div class="key" onclick="openAdmin()">🔑</div>
 
-<!-- 🔥 Firebase CDN (COMPAT – works in single HTML) -->
+<!-- Firebase CDN -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
 
 <script>
-// 🔐 YOUR FIREBASE CONFIG (FIXED)
 firebase.initializeApp({
   apiKey: "AIzaSyCXXYQnIt8ovhEidRTx-B3S0k9DZV1oi7M",
   authDomain: "for-my-love-5c7c1.firebaseapp.com",
@@ -144,36 +129,36 @@ firebase.initializeApp({
 });
 
 const storage = firebase.storage();
-let recorder;
-let chunks=[];
+const music=document.getElementById("music");
+let recorder,chunks=[];
 
-// FLOW
 function yes(){
   music.play().catch(()=>{});
-  s1.classList.add("hide");
-  s2.classList.remove("hide");
+  step1.classList.add("hide");
+  step2.classList.remove("hide");
 }
-function next(){
-  s2.classList.add("hide");
-  s3.classList.remove("hide");
+function toFinger(){
+  step2.classList.add("hide");
+  step3.classList.remove("hide");
 }
-function done(){
-  s3.classList.add("hide");
-  s4.classList.remove("hide");
+function complete(){
+  step3.classList.add("hide");
+  step4.classList.remove("hide");
 }
 
-// RECORD & UPLOAD (ANY PHONE)
-mic.onclick = async ()=>{
+/* RECORD → CLOUD */
+mic.onclick=async ()=>{
   if(!recorder){
-    const stream = await navigator.mediaDevices.getUserMedia({audio:true});
-    recorder = new MediaRecorder(stream);
-    recorder.ondataavailable = e => chunks.push(e.data);
-    recorder.onstop = async ()=>{
-      const blob = new Blob(chunks,{type:"audio/webm"});
+    const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+    recorder=new MediaRecorder(stream);
+    recorder.ondataavailable=e=>chunks.push(e.data);
+    recorder.onstop=async ()=>{
+      const blob=new Blob(chunks,{type:"audio/webm"});
       chunks=[];
-      const ref = storage.ref("voices/"+Date.now()+".webm");
+      const ref=storage.ref("voices/"+Date.now()+".webm");
       await ref.put(blob);
-      alert("Voice saved to cloud ❤️");
+      mic.innerText="✔️";
+      setTimeout(()=>mic.innerText="🎤",1200);
     };
     recorder.start();
     mic.classList.add("recording");
@@ -184,17 +169,32 @@ mic.onclick = async ()=>{
   }
 };
 
-// ADMIN PANEL
+/* CERTIFICATE */
+function downloadCert(){
+  const text=`MARRIAGE CERTIFICATE
+
+Bride: Prapti
+Groom: Abdullah
+
+Bond: Eternal ❤️`;
+  const blob=new Blob([text],{type:"text/plain"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="Marriage_Certificate.txt";
+  a.click();
+}
+
+/* ADMIN PANEL – SAME DESIGN */
 async function openAdmin(){
-  if(prompt("Admin Password")!=="112211") return;
+  if(prompt("Admin Password:")!=="112211") return;
 
   const panel=document.createElement("div");
   panel.className="admin";
-  panel.innerHTML="<h2>Cloud Voice List</h2>";
+  panel.innerHTML="<h2>Saved Voice List</h2>";
 
-  const list = await storage.ref("voices").listAll();
+  const list=await storage.ref("voices").listAll();
   for(const item of list.items){
-    const url = await item.getDownloadURL();
+    const url=await item.getDownloadURL();
     const d=document.createElement("div");
     d.className="voiceItem";
     d.innerHTML=`
@@ -209,7 +209,6 @@ async function openAdmin(){
   close.innerText="Close";
   close.onclick=()=>panel.remove();
   panel.appendChild(close);
-
   document.body.appendChild(panel);
 }
 

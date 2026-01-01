@@ -2,115 +2,94 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>For My Love</title>
+<title>Forever & Always 💍</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:Arial,Helvetica,sans-serif;
-}
-
+/* ==== SAME DESIGN (UNCHANGED) ==== */
+*{margin:0;padding:0;box-sizing:border-box}
 body{
-  background:#000;
+  height:100vh;
+  background:radial-gradient(circle at top,#160c2a,#05020a 70%);
+  font-family:Poppins,sans-serif;
   color:#fff;
-  min-height:100vh;
+  overflow:hidden;
 }
-
-.screen{
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  padding:20px;
-  animation:fade .8s ease;
-}
-
-.hidden{display:none}
-
-@keyframes fade{
-  from{opacity:0}
-  to{opacity:1}
-}
-
-h1,h2,p{margin-bottom:15px}
-
-.btn{
-  padding:12px 35px;
-  margin:10px;
-  border:none;
-  border-radius:30px;
-  font-size:16px;
-  cursor:pointer;
-  background:#fff;
-  color:#000;
-}
-
-#adminKey{
-  position:fixed;
-  bottom:10px;
-  right:10px;
-  font-size:20px;
-  cursor:pointer;
-}
-
-.adminPanel{
-  position:fixed;
-  inset:0;
-  background:#000;
-  padding:20px;
-  z-index:999;
-  overflow:auto;
-}
-
-.voiceItem{
-  border:1px solid #fff;
-  padding:10px;
-  margin:10px 0;
-}
+.bg-glow{position:absolute;inset:-20%;background:radial-gradient(circle at center,rgba(255,215,0,.15),transparent 60%);animation:rotate 40s linear infinite}
+@keyframes rotate{to{transform:rotate(360deg)}}
+.particle{position:absolute;width:6px;height:6px;border-radius:50%;background:radial-gradient(circle,#ffd27d,#c89b3c);animation:float 14s linear infinite}
+@keyframes float{from{transform:translateY(110vh) scale(.6)}to{transform:translateY(-20vh) scale(1.2)}}
+.card{position:absolute;inset:0;display:flex;justify-content:center;align-items:center;animation:fadeUp 1.6s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(60px) scale(.95)}to{opacity:1;transform:none}}
+.hide{display:none}
+.glass{width:92%;max-width:480px;padding:45px;border-radius:34px;background:linear-gradient(145deg,rgba(255,255,255,.12),rgba(255,255,255,.04));backdrop-filter:blur(45px);border:1px solid rgba(255,255,255,.18);box-shadow:0 40px 120px rgba(0,0,0,.9);text-align:center}
+h1,h2{font-family:'Playfair Display';margin-bottom:18px}
+button{padding:16px 42px;border-radius:999px;border:none;background:linear-gradient(135deg,#d4af37,#fff1b8,#c89b3c);box-shadow:0 20px 50px rgba(212,175,55,.85);cursor:pointer;margin:6px}
+.voice,.finger{width:130px;height:130px;border-radius:50%;border:2px solid gold;font-size:50px;display:flex;align-items:center;justify-content:center;margin:20px auto;cursor:pointer}
+.recording{background:red}
+.key{position:fixed;bottom:12px;right:12px;font-size:26px;opacity:.7;cursor:pointer}
 </style>
 </head>
 
 <body>
 
-<div id="step1" class="screen">
-  <h1>I love you my Jan Prapti ❤️</h1>
-  <h2>Will you marry me?</h2>
-  <button class="btn" onclick="goStep2()">Yes</button>
-  <button class="btn" onclick="alert('No option disabled')">No</button>
-</div>
+<div class="bg-glow"></div>
 
-<div id="step2" class="screen hidden">
-  <h2>Say “Kobul” 🎤</h2>
-  <button class="btn" onclick="startRec()">Start Voice</button>
-  <button class="btn hidden" id="stopBtn" onclick="stopRec()">Stop</button>
-</div>
-
-<div id="step3" class="screen hidden">
-  <h2>Fingerprint Verification</h2>
-  <button class="btn" onclick="complete()">Scan Finger</button>
-</div>
-
-<div id="step4" class="screen hidden">
-  <h2>Marriage Complete 💍</h2>
-  <p>Abdullah is now your husband</p>
-  <button class="btn" onclick="downloadCert()">Download Certificate</button>
-</div>
-
-<div id="adminKey" onclick="openAdmin()">🔑</div>
-
-<audio autoplay loop>
+<audio id="music" loop preload="auto" playsinline>
   <source src="https://github.com/warriorcheat/Surprise-for-my-jan/raw/refs/heads/main/music.mp3">
 </audio>
 
+<div class="card" id="love">
+  <div class="glass">
+    <h1>I love you my Jan Prapti ❤️</h1>
+    <h2>Will you marry me?</h2>
+    <button onclick="yes()">Yes 💍</button>
+    <button onclick="no()">No ❌</button>
+  </div>
+</div>
+
+<div class="card hide" id="kobul">
+  <div class="glass">
+    <h2>Say Kobul ❤️</h2>
+    <div class="voice" id="mic">🎤</div>
+    <button onclick="toFinger()">Continue</button>
+  </div>
+</div>
+
+<div class="card hide" id="finger">
+  <div class="glass">
+    <h2>Place Your Finger 🖐️</h2>
+    <div class="finger" onclick="complete()">🖐️</div>
+  </div>
+</div>
+
+<div class="card hide" id="done">
+  <div class="glass">
+    <h2 style="color:gold">Marriage Complete 💍</h2>
+    <p><b>Abdullah</b> & <b>Prapti</b></p>
+    <button onclick="download()">Download Marriage Certificate</button>
+  </div>
+</div>
+
+<div class="key" onclick="admin()">🔑</div>
+
+<!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
 
 <script>
+/* particles */
+for(let i=0;i<45;i++){
+  let p=document.createElement("div");
+  p.className="particle";
+  p.style.left=Math.random()*100+"vw";
+  p.style.animationDelay=Math.random()*8+"s";
+  document.body.appendChild(p);
+}
+
+/* firebase */
 firebase.initializeApp({
   apiKey:"AIzaSyCXXYQnIt8ovhEidRTx-B3S0k9DZV1oi7M",
   authDomain:"for-my-love-5c7c1.firebaseapp.com",
@@ -120,76 +99,72 @@ firebase.initializeApp({
 });
 const storage=firebase.storage();
 
-/* FLOW */
-function goStep2(){
-  step1.classList.add("hidden");
-  step2.classList.remove("hidden");
-}
-
-/* VOICE */
+const music=document.getElementById("music");
 let recorder,chunks=[];
-async function startRec(){
-  const s=await navigator.mediaDevices.getUserMedia({audio:true});
-  recorder=new MediaRecorder(s);
-  chunks=[];
-  recorder.ondataavailable=e=>chunks.push(e.data);
-  recorder.start();
-  stopBtn.classList.remove("hidden");
+
+function yes(){
+  music.play().catch(()=>{});
+  love.classList.add("hide");
+  kobul.classList.remove("hide");
 }
-function stopRec(){
-  recorder.stop();
-  recorder.onstop=async()=>{
-    const blob=new Blob(chunks,{type:"audio/webm"});
-    await storage.ref("voices/"+Date.now()+".webm").put(blob);
-    step2.classList.add("hidden");
-    step3.classList.remove("hidden");
+function no(){alert("Destiny already chose us ❤️")}
+
+/* VOICE → CLOUD */
+mic.onclick=async ()=>{
+  if(!recorder){
+    const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+    recorder=new MediaRecorder(stream);
+    chunks=[];
+    recorder.ondataavailable=e=>chunks.push(e.data);
+    recorder.onstop=async ()=>{
+      const blob=new Blob(chunks,{type:"audio/webm"});
+      const ref=storage.ref("voices/"+Date.now()+".webm");
+      await ref.put(blob);
+      mic.innerText="✔️";
+      mic.classList.remove("recording");
+    };
+    recorder.start();
+    mic.classList.add("recording");
+  }else{
+    recorder.stop();
+    recorder=null;
   }
-}
+};
 
-/* COMPLETE */
-function complete(){
-  step3.classList.add("hidden");
-  step4.classList.remove("hidden");
-}
+function toFinger(){kobul.classList.add("hide");finger.classList.remove("hide")}
+function complete(){finger.classList.add("hide");done.classList.remove("hide")}
 
-function downloadCert(){
-  const t="Marriage Certificate\nAbdullah ❤️ Prapti";
-  const b=new Blob([t],{type:"text/plain"});
+function download(){
+  const text=`Marriage Certificate\nAbdullah ❤️ Prapti`;
+  const b=new Blob([text],{type:"text/plain"});
   const a=document.createElement("a");
   a.href=URL.createObjectURL(b);
-  a.download="Marriage-Certificate.txt";
+  a.download="Marriage_Certificate.txt";
   a.click();
 }
 
-/* ADMIN */
-function openAdmin(){
-  const o=document.createElement("div");
-  o.className="adminPanel";
-  o.innerHTML=`
-    <h2>Admin Login</h2>
-    <input id="pin" type="password" placeholder="PIN" style="padding:10px;width:100%;margin:10px 0">
-    <button class="btn" onclick="checkPin()">Unlock</button>
-  `;
-  document.body.appendChild(o);
-}
-async function checkPin(){
-  if(pin.value!=="112211"){alert("Wrong PIN");return}
-  document.body.lastChild.remove();
-  const p=document.createElement("div");
-  p.className="adminPanel";
-  p.innerHTML="<h2>Saved Voices</h2>";
+/* ADMIN CLOUD PANEL */
+async function admin(){
+  if(prompt("Admin Password:")!=="112211"){alert("Wrong password");return}
+  const panel=document.createElement("div");
+  panel.style.position="fixed";
+  panel.style.inset="0";
+  panel.style.background="#000";
+  panel.style.padding="20px";
+  panel.style.overflow="auto";
+  panel.innerHTML="<h2>Saved Voices</h2>";
   const list=await storage.ref("voices").listAll();
   for(const i of list.items){
-    const u=await i.getDownloadURL();
-    p.innerHTML+=`
-      <div class="voiceItem">
-        <audio controls src="${u}"></audio><br>
-        <a href="${u}" download>Download</a>
+    const url=await i.getDownloadURL();
+    panel.innerHTML+=`
+      <div style="margin:15px 0;border:1px solid gold;padding:10px">
+        <audio controls src="${url}"></audio><br>
+        <a href="${url}" download>⬇ Download</a>
         <button onclick="storage.ref('${i.fullPath}').delete().then(()=>location.reload())">Delete</button>
       </div>`;
   }
-  p.innerHTML+=`<button class="btn" onclick="this.parentElement.remove()">Close</button>`;
-  document.body.appendChild(p);
+  panel.innerHTML+=`<button onclick="this.parentElement.remove()">Close</button>`;
+  document.body.appendChild(panel);
 }
 </script>
 

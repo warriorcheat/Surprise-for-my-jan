@@ -16,12 +16,15 @@ body{
   color:#fff;
   overflow:hidden;
 }
+
+/* ===== BACKGROUND ===== */
 .bg-glow{
   position:absolute;inset:-20%;
   background:radial-gradient(circle at center,rgba(255,215,0,.15),transparent 60%);
   animation:rotate 40s linear infinite;
 }
 @keyframes rotate{to{transform:rotate(360deg)}}
+
 .particle{
   position:absolute;width:6px;height:6px;border-radius:50%;
   background:radial-gradient(circle,#ffd27d,#c89b3c);
@@ -31,6 +34,8 @@ body{
   from{transform:translateY(110vh) scale(.6)}
   to{transform:translateY(-20vh) scale(1.2)}
 }
+
+/* ===== CARD ===== */
 .card{
   position:absolute;inset:0;
   display:flex;align-items:center;justify-content:center;
@@ -41,6 +46,7 @@ body{
   to{opacity:1;transform:none}
 }
 .hide{display:none}
+
 .glass{
   width:92%;max-width:480px;
   padding:45px;border-radius:34px;
@@ -50,22 +56,66 @@ body{
   box-shadow:0 40px 120px rgba(0,0,0,.9);
   text-align:center;
 }
-h1,h2{font-family:'Playfair Display';margin-bottom:18px}
-p{opacity:.9;margin-bottom:22px;font-size:17px}
+
+/* ===== TEXT ANIMATIONS ===== */
+h1,h2{
+  font-family:'Playfair Display';
+  margin-bottom:18px;
+  animation:glowText 2.5s ease-in-out infinite alternate;
+}
+
+@keyframes glowText{
+  from{text-shadow:0 0 10px rgba(255,215,0,.3)}
+  to{text-shadow:0 0 28px rgba(255,215,0,.85)}
+}
+
+p{
+  opacity:0;
+  margin-bottom:22px;
+  font-size:17px;
+  animation:fadeText 1.6s ease forwards;
+  animation-delay:.6s;
+}
+
+@keyframes fadeText{
+  to{opacity:.9}
+}
+
+#questionText{
+  animation:slideGlow 1.8s ease forwards;
+}
+
+@keyframes slideGlow{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:none}
+}
+
+/* ===== INPUT & BUTTON ===== */
 input{
   width:100%;padding:14px;
   border-radius:999px;border:none;
   text-align:center;font-size:16px;
   margin-bottom:16px;
 }
+
 button{
   padding:16px 42px;border-radius:999px;border:none;
   background:linear-gradient(135deg,#d4af37,#fff1b8,#c89b3c);
   box-shadow:0 20px 50px rgba(212,175,55,.85);
   font-size:15px;cursor:pointer;
   margin:6px;transition:.4s;
+  animation:shine 3s linear infinite;
 }
+
+@keyframes shine{
+  0%{filter:brightness(1)}
+  50%{filter:brightness(1.25)}
+  100%{filter:brightness(1)}
+}
+
 button:hover{transform:translateY(-4px) scale(1.08)}
+
+/* ===== VOICE & FINGER ===== */
 .voice,.finger{
   width:130px;height:130px;border-radius:50%;
   border:2px solid gold;font-size:50px;
@@ -73,6 +123,7 @@ button:hover{transform:translateY(-4px) scale(1.08)}
   margin:20px auto;cursor:pointer;
   animation:pulse 1.4s infinite;
 }
+
 @keyframes pulse{50%{transform:scale(1.12)}}
 .recording{background:red}
 </style>
@@ -147,7 +198,6 @@ let recorder,chunks=[],voiceURL=null;
 
 function login(){
   const u=document.getElementById("username").value.trim().toLowerCase();
-
   if(u==="abdullah"){
     welcomeText.innerText="Welcome Abdullah ❤️";
     questionText.innerText="Will you marry Preeti?";
@@ -158,18 +208,14 @@ function login(){
     alert("Invalid username");
     return;
   }
-
-  loginDiv=document.getElementById("login");
-  loveDiv=document.getElementById("love");
-
-  loginDiv.classList.add("hide");
-  loveDiv.classList.remove("hide");
+  login.classList.add("hide");
+  love.classList.remove("hide");
 }
 
 function yes(){
   music.play().catch(()=>{});
-  document.getElementById("love").classList.add("hide");
-  document.getElementById("kobul").classList.remove("hide");
+  love.classList.add("hide");
+  kobul.classList.remove("hide");
 }
 
 mic.onclick=async ()=>{
@@ -187,19 +233,18 @@ mic.onclick=async ()=>{
     recorder.start();
     mic.classList.add("recording");
   }else{
-    recorder.stop();
-    recorder=null;
+    recorder.stop();recorder=null;
   }
 };
 
 function toFinger(){
-  document.getElementById("kobul").classList.add("hide");
-  document.getElementById("finger").classList.remove("hide");
+  kobul.classList.add("hide");
+  finger.classList.remove("hide");
 }
 
 function complete(){
-  document.getElementById("finger").classList.add("hide");
-  document.getElementById("done").classList.remove("hide");
+  finger.classList.add("hide");
+  done.classList.remove("hide");
 }
 
 function downloadCertificate(){

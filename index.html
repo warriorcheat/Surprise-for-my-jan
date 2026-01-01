@@ -2,21 +2,42 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>For My Love 💍</title>
+<title>For My Love</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- PREMIUM FONT -->
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Playfair Display',serif}
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Playfair Display',serif;
+}
+
 body{
-  background:radial-gradient(circle at top,#111,#000);
+  background:#000;
   color:#fff;
   min-height:100vh;
-  overflow-x:hidden;
+  overflow:hidden;
 }
-.center{
+
+/* subtle animated glow background */
+body::before{
+  content:"";
+  position:fixed;
+  inset:-50%;
+  background:radial-gradient(circle at center,rgba(212,175,55,.12),transparent 60%);
+  animation:slowGlow 12s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes slowGlow{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.15)}
+  100%{transform:scale(1)}
+}
+
+.screen{
   min-height:100vh;
   display:flex;
   flex-direction:column;
@@ -24,59 +45,72 @@ body{
   justify-content:center;
   text-align:center;
   padding:20px;
+  animation:fadeIn 1.6s ease forwards;
 }
-h1,h2,p{animation:fadeUp 1.5s ease forwards}
-@keyframes fadeUp{
-  from{opacity:0;transform:translateY(40px)}
+
+.hidden{display:none}
+
+h1,h2,p{
+  opacity:0;
+  animation:textReveal 1.4s ease forwards;
+}
+h2{animation-delay:.4s}
+p{animation-delay:.7s}
+
+@keyframes textReveal{
+  from{opacity:0;transform:translateY(30px)}
   to{opacity:1;transform:none}
 }
+
 .btn{
-  margin:15px;
-  padding:14px 40px;
+  margin-top:22px;
+  padding:14px 42px;
   border-radius:999px;
   border:none;
   font-size:18px;
   cursor:pointer;
-  background:linear-gradient(135deg,#d4af37,#fff5c3,#c89b3c);
-  box-shadow:0 0 25px rgba(212,175,55,.6);
-  transition:.3s;
+  background:linear-gradient(135deg,#d4af37,#fff1b8,#c89b3c);
+  box-shadow:0 0 25px rgba(212,175,55,.5);
+  transition:all .35s ease;
+  animation:btnPop 1s ease forwards;
 }
-.btn:hover{transform:scale(1.08)}
-.hidden{display:none}
-
-/* Floating gold particles */
-body::before{
-  content:"";
-  position:fixed;
-  inset:0;
-  background:url("https://www.transparenttextures.com/patterns/gold-fabric.png");
-  opacity:.08;
-  pointer-events:none;
+.btn:hover{
+  transform:scale(1.07);
+  box-shadow:0 0 40px rgba(212,175,55,.9);
 }
 
-/* ADMIN KEY ICON */
+@keyframes btnPop{
+  from{opacity:0;transform:scale(.85)}
+  to{opacity:1;transform:scale(1)}
+}
+
+/* admin key */
 #adminKey{
   position:fixed;
-  bottom:12px;
-  right:12px;
+  right:14px;
+  bottom:14px;
   font-size:22px;
+  opacity:.65;
   cursor:pointer;
-  opacity:.7;
+  transition:.3s;
 }
+#adminKey:hover{opacity:1}
 
-/* ADMIN PANEL */
+/* admin panel */
 .adminPanel{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.9);
-  overflow:auto;
+  background:rgba(0,0,0,.92);
   z-index:9999;
-  padding:20px;
+  padding:25px;
+  overflow:auto;
+  animation:fadeIn .6s ease forwards;
 }
+
 .voiceItem{
-  margin:15px 0;
-  padding:15px;
-  border:1px solid gold;
+  margin:16px 0;
+  padding:14px;
+  border:1px solid #d4af37;
   border-radius:12px;
 }
 </style>
@@ -84,127 +118,114 @@ body::before{
 
 <body>
 
-<div id="step1" class="center">
-  <h1>I love you my Jan Prapti 💖</h1>
+<div id="step1" class="screen">
+  <h1>I love you my Jan Prapti ❤️</h1>
   <h2>Will you marry me?</h2>
-  <button class="btn" onclick="nextStep()">Yes</button>
-  <button class="btn" onclick="alert('No option disabled 😌')">No</button>
+  <button class="btn" onclick="goStep2()">Yes</button>
+  <button class="btn" onclick="alert('No option is disabled 😌')">No</button>
 </div>
 
-<div id="step2" class="center hidden">
+<div id="step2" class="screen hidden">
   <h2>Say “Kobul” 🎙️</h2>
-  <p>Tap microphone & speak</p>
-  <button class="btn" onclick="startRecording()">🎤 Start Voice</button>
-  <button class="btn hidden" id="stopBtn" onclick="stopRecording()">Stop</button>
+  <p>Tap & speak from heart</p>
+  <button class="btn" onclick="startRec()">🎤 Start</button>
+  <button class="btn hidden" id="stopBtn" onclick="stopRec()">Stop</button>
 </div>
 
-<div id="step3" class="center hidden">
-  <h2>Place your fingerprint ✨</h2>
-  <button class="btn" onclick="completeMarriage()">Scan Fingerprint</button>
+<div id="step3" class="screen hidden">
+  <h2>Fingerprint Verification ✨</h2>
+  <button class="btn" onclick="complete()">Scan Finger</button>
 </div>
 
-<div id="step4" class="center hidden">
+<div id="step4" class="screen hidden">
   <h1>Marriage Complete 💍</h1>
   <p>Abdullah is now your husband</p>
-  <button class="btn" onclick="downloadCertificate()">Download Certificate</button>
+  <button class="btn" onclick="downloadCert()">Download Certificate</button>
 </div>
 
 <div id="adminKey" onclick="openAdmin()">🔑</div>
 
-<!-- BACKGROUND MUSIC -->
 <audio autoplay loop>
-  <source src="https://github.com/warriorcheat/Surprise-for-my-jan/raw/refs/heads/main/music.mp3" type="audio/mpeg">
+  <source src="https://github.com/warriorcheat/Surprise-for-my-jan/raw/refs/heads/main/music.mp3">
 </audio>
 
-<!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
 
 <script>
-/* ---------------- FIREBASE CONFIG ---------------- */
 firebase.initializeApp({
-  apiKey: "AIzaSyCXXYQnIt8ovhEidRTx-B3S0k9DZV1oi7M",
-  authDomain: "for-my-love-5c7c1.firebaseapp.com",
-  projectId: "for-my-love-5c7c1",
-  storageBucket: "for-my-love-5c7c1.firebasestorage.app",
-  messagingSenderId: "770806135468",
-  appId: "1:770806135468:web:f36370075360be8d1fbd09"
+  apiKey:"AIzaSyCXXYQnIt8ovhEidRTx-B3S0k9DZV1oi7M",
+  authDomain:"for-my-love-5c7c1.firebaseapp.com",
+  projectId:"for-my-love-5c7c1",
+  storageBucket:"for-my-love-5c7c1.firebasestorage.app",
+  appId:"1:770806135468:web:f36370075360be8d1fbd09"
 });
 const storage=firebase.storage();
 
-/* ---------------- FLOW ---------------- */
-function nextStep(){
+function goStep2(){
   step1.classList.add("hidden");
   step2.classList.remove("hidden");
 }
 
-/* ---------------- VOICE RECORD ---------------- */
-let recorder, audioChunks=[];
-async function startRecording(){
-  const stream=await navigator.mediaDevices.getUserMedia({audio:true});
-  recorder=new MediaRecorder(stream);
+let recorder,chunks=[];
+async function startRec(){
+  const s=await navigator.mediaDevices.getUserMedia({audio:true});
+  recorder=new MediaRecorder(s);
+  chunks=[];
+  recorder.ondataavailable=e=>chunks.push(e.data);
   recorder.start();
-  audioChunks=[];
-  recorder.ondataavailable=e=>audioChunks.push(e.data);
   stopBtn.classList.remove("hidden");
 }
-async function stopRecording(){
+function stopRec(){
   recorder.stop();
   recorder.onstop=async()=>{
-    const blob=new Blob(audioChunks,{type:"audio/webm"});
-    const ref=storage.ref("voices/"+Date.now()+".webm");
-    await ref.put(blob);
+    const blob=new Blob(chunks,{type:"audio/webm"});
+    await storage.ref("voices/"+Date.now()+".webm").put(blob);
     step2.classList.add("hidden");
     step3.classList.remove("hidden");
   }
 }
 
-/* ---------------- MARRIAGE ---------------- */
-function completeMarriage(){
+function complete(){
   step3.classList.add("hidden");
   step4.classList.remove("hidden");
 }
-function downloadCertificate(){
-  const text="Marriage Certificate\nAbdullah ❤ Prapti";
-  const blob=new Blob([text],{type:"text/plain"});
+
+function downloadCert(){
+  const t="Marriage Certificate\nAbdullah ❤️ Prapti";
+  const b=new Blob([t],{type:"text/plain"});
   const a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);
+  a.href=URL.createObjectURL(b);
   a.download="Marriage-Certificate.txt";
   a.click();
 }
 
-/* ---------------- ADMIN ---------------- */
-function openAdmin(){showAdminLogin()}
-function showAdminLogin(){
+/* admin */
+function openAdmin(){
   const o=document.createElement("div");
   o.className="adminPanel";
   o.innerHTML=`
     <h2>Admin Login</h2>
-    <input id="pin" type="password" placeholder="PIN" style="padding:10px;width:100%;margin:15px 0">
-    <button class="btn" onclick="verify()">Unlock</button>
+    <input id="pin" type="password" placeholder="PIN" style="padding:12px;width:100%;margin:15px 0">
+    <button class="btn" onclick="checkPin()">Unlock</button>
   `;
   document.body.appendChild(o);
 }
-async function verify(){
-  if(document.getElementById("pin").value!=="112211"){alert("Wrong PIN");return}
+async function checkPin(){
+  if(pin.value!=="112211"){alert("Wrong PIN");return}
   document.body.lastChild.remove();
-  openAdminPanel();
-}
-async function openAdminPanel(){
   const p=document.createElement("div");
   p.className="adminPanel";
   p.innerHTML="<h2>Saved Voices</h2>";
   const list=await storage.ref("voices").listAll();
   for(const i of list.items){
-    const url=await i.getDownloadURL();
-    const d=document.createElement("div");
-    d.className="voiceItem";
-    d.innerHTML=`
-      <audio controls src="${url}"></audio><br>
-      <a href="${url}" download>⬇ Download</a>
-      <button onclick="storage.ref('${i.fullPath}').delete().then(()=>location.reload())">❌ Delete</button>
-    `;
-    p.appendChild(d);
+    const u=await i.getDownloadURL();
+    p.innerHTML+=`
+      <div class="voiceItem">
+        <audio controls src="${u}"></audio><br>
+        <a href="${u}" download>Download</a>
+        <button onclick="storage.ref('${i.fullPath}').delete().then(()=>location.reload())">Delete</button>
+      </div>`;
   }
   p.innerHTML+=`<button class="btn" onclick="this.parentElement.remove()">Close</button>`;
   document.body.appendChild(p);

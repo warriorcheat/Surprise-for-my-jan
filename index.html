@@ -5,36 +5,18 @@
 <title>For My Love</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
-
 <style>
 *{
   margin:0;
   padding:0;
   box-sizing:border-box;
-  font-family:'Playfair Display',serif;
+  font-family:Arial,Helvetica,sans-serif;
 }
 
 body{
   background:#000;
   color:#fff;
   min-height:100vh;
-  overflow:hidden;
-}
-
-/* subtle animated glow background */
-body::before{
-  content:"";
-  position:fixed;
-  inset:-50%;
-  background:radial-gradient(circle at center,rgba(212,175,55,.12),transparent 60%);
-  animation:slowGlow 12s ease-in-out infinite;
-  pointer-events:none;
-}
-@keyframes slowGlow{
-  0%{transform:scale(1)}
-  50%{transform:scale(1.15)}
-  100%{transform:scale(1)}
 }
 
 .screen{
@@ -45,73 +27,50 @@ body::before{
   justify-content:center;
   text-align:center;
   padding:20px;
-  animation:fadeIn 1.6s ease forwards;
+  animation:fade .8s ease;
 }
 
 .hidden{display:none}
 
-h1,h2,p{
-  opacity:0;
-  animation:textReveal 1.4s ease forwards;
+@keyframes fade{
+  from{opacity:0}
+  to{opacity:1}
 }
-h2{animation-delay:.4s}
-p{animation-delay:.7s}
 
-@keyframes textReveal{
-  from{opacity:0;transform:translateY(30px)}
-  to{opacity:1;transform:none}
-}
+h1,h2,p{margin-bottom:15px}
 
 .btn{
-  margin-top:22px;
-  padding:14px 42px;
-  border-radius:999px;
+  padding:12px 35px;
+  margin:10px;
   border:none;
-  font-size:18px;
+  border-radius:30px;
+  font-size:16px;
   cursor:pointer;
-  background:linear-gradient(135deg,#d4af37,#fff1b8,#c89b3c);
-  box-shadow:0 0 25px rgba(212,175,55,.5);
-  transition:all .35s ease;
-  animation:btnPop 1s ease forwards;
-}
-.btn:hover{
-  transform:scale(1.07);
-  box-shadow:0 0 40px rgba(212,175,55,.9);
+  background:#fff;
+  color:#000;
 }
 
-@keyframes btnPop{
-  from{opacity:0;transform:scale(.85)}
-  to{opacity:1;transform:scale(1)}
-}
-
-/* admin key */
 #adminKey{
   position:fixed;
-  right:14px;
-  bottom:14px;
-  font-size:22px;
-  opacity:.65;
+  bottom:10px;
+  right:10px;
+  font-size:20px;
   cursor:pointer;
-  transition:.3s;
 }
-#adminKey:hover{opacity:1}
 
-/* admin panel */
 .adminPanel{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.92);
-  z-index:9999;
-  padding:25px;
+  background:#000;
+  padding:20px;
+  z-index:999;
   overflow:auto;
-  animation:fadeIn .6s ease forwards;
 }
 
 .voiceItem{
-  margin:16px 0;
-  padding:14px;
-  border:1px solid #d4af37;
-  border-radius:12px;
+  border:1px solid #fff;
+  padding:10px;
+  margin:10px 0;
 }
 </style>
 </head>
@@ -122,23 +81,22 @@ p{animation-delay:.7s}
   <h1>I love you my Jan Prapti ❤️</h1>
   <h2>Will you marry me?</h2>
   <button class="btn" onclick="goStep2()">Yes</button>
-  <button class="btn" onclick="alert('No option is disabled 😌')">No</button>
+  <button class="btn" onclick="alert('No option disabled')">No</button>
 </div>
 
 <div id="step2" class="screen hidden">
-  <h2>Say “Kobul” 🎙️</h2>
-  <p>Tap & speak from heart</p>
-  <button class="btn" onclick="startRec()">🎤 Start</button>
+  <h2>Say “Kobul” 🎤</h2>
+  <button class="btn" onclick="startRec()">Start Voice</button>
   <button class="btn hidden" id="stopBtn" onclick="stopRec()">Stop</button>
 </div>
 
 <div id="step3" class="screen hidden">
-  <h2>Fingerprint Verification ✨</h2>
+  <h2>Fingerprint Verification</h2>
   <button class="btn" onclick="complete()">Scan Finger</button>
 </div>
 
 <div id="step4" class="screen hidden">
-  <h1>Marriage Complete 💍</h1>
+  <h2>Marriage Complete 💍</h2>
   <p>Abdullah is now your husband</p>
   <button class="btn" onclick="downloadCert()">Download Certificate</button>
 </div>
@@ -162,11 +120,13 @@ firebase.initializeApp({
 });
 const storage=firebase.storage();
 
+/* FLOW */
 function goStep2(){
   step1.classList.add("hidden");
   step2.classList.remove("hidden");
 }
 
+/* VOICE */
 let recorder,chunks=[];
 async function startRec(){
   const s=await navigator.mediaDevices.getUserMedia({audio:true});
@@ -186,6 +146,7 @@ function stopRec(){
   }
 }
 
+/* COMPLETE */
 function complete(){
   step3.classList.add("hidden");
   step4.classList.remove("hidden");
@@ -200,13 +161,13 @@ function downloadCert(){
   a.click();
 }
 
-/* admin */
+/* ADMIN */
 function openAdmin(){
   const o=document.createElement("div");
   o.className="adminPanel";
   o.innerHTML=`
     <h2>Admin Login</h2>
-    <input id="pin" type="password" placeholder="PIN" style="padding:12px;width:100%;margin:15px 0">
+    <input id="pin" type="password" placeholder="PIN" style="padding:10px;width:100%;margin:10px 0">
     <button class="btn" onclick="checkPin()">Unlock</button>
   `;
   document.body.appendChild(o);

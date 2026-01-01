@@ -5,266 +5,143 @@
 <title>Forever Begins ✨</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- PREMIUM FONTS -->
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-
 body{
-  height:100vh;
-  overflow:hidden;
+  height:100vh;overflow:hidden;
   background:radial-gradient(circle at top,#120b1f,#05020a 70%);
-  font-family:'Poppins',sans-serif;
-  color:#fff;
+  font-family:Poppins,sans-serif;color:#fff;
 }
-
-/* ===== PARTICLES ===== */
-.particle{
-  position:absolute;
-  width:6px;
-  height:6px;
-  background:radial-gradient(circle,gold,#ffcc70);
-  border-radius:50%;
-  opacity:.8;
-  animation:float 12s linear infinite;
-}
-
-@keyframes float{
-  from{transform:translateY(110vh) scale(.6)}
-  to{transform:translateY(-20vh) scale(1.2)}
-}
-
-/* ===== ENTER ===== */
-#enter{
-  position:fixed;
-  inset:0;
-  background:radial-gradient(circle,#1a0f2e,#05020a);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  z-index:1000;
-}
-
-.enter-box{
-  padding:50px;
-  border-radius:35px;
-  background:rgba(255,255,255,0.06);
-  backdrop-filter:blur(35px);
-  border:1px solid rgba(255,255,255,.15);
-  box-shadow:0 50px 120px rgba(0,0,0,.9);
-  text-align:center;
-  animation:breath 3s infinite;
-}
-
-@keyframes breath{
-  0%{transform:scale(1)}
-  50%{transform:scale(1.05)}
-  100%{transform:scale(1)}
-}
-
-.enter-box h1{
-  font-family:'Playfair Display',serif;
-  font-size:32px;
-  margin-bottom:12px;
-}
-
-.enter-box p{opacity:.8}
-
-/* ===== CARD ===== */
-.card{
-  position:absolute;
-  inset:0;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
-
+.card{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
 .glass{
-  width:92%;
-  max-width:440px;
-  padding:45px 35px;
-  border-radius:32px;
-  background:linear-gradient(145deg,rgba(255,255,255,.12),rgba(255,255,255,.04));
-  backdrop-filter:blur(40px);
+  width:92%;max-width:440px;padding:40px;border-radius:30px;
+  background:rgba(255,255,255,.08);
+  backdrop-filter:blur(35px);
   border:1px solid rgba(255,255,255,.18);
-  box-shadow:
-    0 40px 90px rgba(0,0,0,.75),
-    inset 0 0 40px rgba(255,255,255,.05);
   text-align:center;
-  animation:rise 1.6s ease;
 }
+.hide{display:none}
+h1,h2{font-family:'Playfair Display';margin-bottom:16px}
+p{opacity:.9;margin-bottom:18px}
 
-.hidden{display:none}
-
-@keyframes rise{
-  from{opacity:0;transform:translateY(60px) scale(.95)}
-  to{opacity:1;transform:translateY(0) scale(1)}
-}
-
-h1,h2{
-  font-family:'Playfair Display',serif;
-  margin-bottom:18px;
-}
-
-h1{font-size:30px}
-h2{font-size:26px}
-
-p{
-  font-size:18px;
-  opacity:.9;
-  margin-bottom:26px;
-}
-
-/* ===== BUTTON ===== */
 button{
-  padding:16px 38px;
-  border:none;
-  border-radius:999px;
+  padding:14px 34px;border-radius:999px;border:none;
   background:linear-gradient(135deg,#d4af37,#fff1b8,#c89b3c);
-  font-size:16px;
-  cursor:pointer;
-  box-shadow:0 18px 40px rgba(212,175,55,.7);
-  transition:.4s;
+  cursor:pointer;font-size:15px;
 }
 
-button:hover{
-  transform:translateY(-4px) scale(1.05);
-  box-shadow:0 30px 70px rgba(212,175,55,.9);
-}
-
-button.secondary{
-  background:transparent;
-  border:1px solid rgba(255,255,255,.4);
-  color:#fff;
-  box-shadow:none;
-}
-
-/* ===== FINGER ===== */
 .finger{
-  width:140px;
-  height:140px;
-  border-radius:50%;
-  border:2px solid gold;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:52px;
-  margin:22px auto;
-  cursor:pointer;
-  box-shadow:
-    0 0 45px rgba(255,215,0,.8),
-    inset 0 0 35px rgba(255,215,0,.4);
-  animation:pulse 1.4s infinite;
+  width:120px;height:120px;border-radius:50%;
+  border:2px solid gold;font-size:46px;
+  display:flex;align-items:center;justify-content:center;
+  margin:18px auto;cursor:pointer;
 }
 
-@keyframes pulse{
-  0%{transform:scale(1)}
-  50%{transform:scale(1.12)}
-  100%{transform:scale(1)}
+/* voice */
+.voice{
+  width:70px;height:70px;border-radius:50%;
+  border:2px solid #fff;font-size:32px;
+  display:flex;align-items:center;justify-content:center;
+  margin:10px auto;cursor:pointer;
+}
+.recording{background:red}
+
+/* admin key */
+.key{
+  position:fixed;bottom:12px;right:12px;
+  font-size:26px;cursor:pointer;opacity:.7;
 }
 </style>
 </head>
 
 <body>
 
-<!-- RAW MUSIC -->
-<audio id="music" loop preload="auto">
+<audio id="music" loop preload="auto" playsinline>
   <source src="https://github.com/warriorcheat/Surprise-for-my-jan/raw/refs/heads/main/music.mp3" type="audio/mpeg">
 </audio>
 
-<!-- ENTER -->
-<div id="enter">
-  <div class="enter-box" onclick="start()">
+<div class="card" id="start">
+  <div class="glass">
     <h1>Tap to Begin ✨</h1>
-    <p>A cinematic love story</p>
+    <button onclick="begin()">Enter</button>
   </div>
 </div>
 
-<!-- STEP 1 -->
-<div class="card hidden" id="s1">
+<div class="card hide" id="proposal">
   <div class="glass">
-    <h1>Welcome to my world ✨</h1>
-  </div>
-</div>
+    <h2>Say Kobul ❤️</h2>
+    <p>Press mic and say your promise</p>
 
-<!-- STEP 2 -->
-<div class="card hidden" id="s2">
-  <div class="glass">
-    <h2>Hey Prapti Jan ❤️</h2>
-    <p>Every heartbeat whispers your name</p>
-    <button onclick="go(3)">Continue</button>
-  </div>
-</div>
+    <div class="voice" id="mic">🎤</div>
 
-<!-- STEP 3 -->
-<div class="card hidden" id="s3">
-  <div class="glass">
-    <h2>Will you marry me? 💍</h2>
-    <button onclick="go(4)">Yes, Forever 💖</button><br><br>
-    <button class="secondary" onclick="alert('Destiny sealed this path ✨')">No</button>
-  </div>
-</div>
-
-<!-- STEP 4 -->
-<div class="card hidden" id="s4">
-  <div class="glass">
-    <h2>Seal Our Forever</h2>
-    <p>Touch your fingerprint</p>
     <div class="finger" onclick="finish()">🖐️</div>
-    <div id="final" class="hidden">
-      <p style="color:gold;font-weight:600">Marriage Complete 💍</p>
-      <p>Now <b>Abdullah</b> is your husband ❤️</p>
-      <button onclick="download()">Download Certificate</button>
+
+    <div id="done" class="hide">
+      <p style="color:gold">Marriage Complete 💍</p>
+      <p>Now Abdullah is your husband ❤️</p>
     </div>
   </div>
 </div>
 
+<div class="key" onclick="admin()">🔑</div>
+
 <script>
 const music=document.getElementById("music");
+let mediaRecorder, audioChunks=[], voiceBlob;
 
-/* PARTICLES */
-for(let i=0;i<40;i++){
-  const p=document.createElement("div");
-  p.className="particle";
-  p.style.left=Math.random()*100+"vw";
-  p.style.animationDelay=Math.random()*8+"s";
-  p.style.opacity=Math.random();
-  document.body.appendChild(p);
-}
-
-function start(){
-  music.volume=.85;
+function begin(){
   music.play().catch(()=>{});
-  document.getElementById("enter").style.display="none";
-  show(1);
-  setTimeout(()=>show(2),2600);
+  document.getElementById("start").classList.add("hide");
+  document.getElementById("proposal").classList.remove("hide");
 }
 
-function show(n){
-  document.querySelectorAll(".card").forEach(c=>c.classList.add("hidden"));
-  document.getElementById("s"+n).classList.remove("hidden");
-}
-
-function go(n){show(n)}
+/* voice record */
+const mic=document.getElementById("mic");
+mic.onclick=async ()=>{
+  if(!mediaRecorder){
+    const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+    mediaRecorder=new MediaRecorder(stream);
+    mediaRecorder.ondataavailable=e=>audioChunks.push(e.data);
+    mediaRecorder.onstop=()=>{
+      voiceBlob=new Blob(audioChunks,{type:"audio/webm"});
+      audioChunks=[];
+      localStorage.setItem("voice",URL.createObjectURL(voiceBlob));
+      mic.classList.remove("recording");
+      mic.innerText="✔️";
+    };
+    mediaRecorder.start();
+    mic.classList.add("recording");
+  }else{
+    mediaRecorder.stop();
+    mediaRecorder=null;
+  }
+};
 
 function finish(){
-  document.getElementById("final").classList.remove("hidden");
+  document.getElementById("done").classList.remove("hide");
 }
 
-function download(){
-  const t=`Marriage Certificate
-
-Bride: Prapti
-Groom: Abdullah
-
-Status: Married ❤️
-Bond: Eternal`;
-  const b=new Blob([t],{type:"text/plain"});
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(b);
-  a.download="Marriage_Certificate.txt";
-  a.click();
+/* admin */
+function admin(){
+  const pass=prompt("Admin Password:");
+  if(pass==="112211"){
+    const v=localStorage.getItem("voice");
+    if(!v){alert("No voice recorded");return;}
+    const a=document.createElement("audio");
+    a.src=v;a.controls=true;
+    const d=document.createElement("a");
+    d.href=v;d.download="kobul_voice.webm";
+    d.innerText="Download Voice";
+    const w=document.createElement("div");
+    w.style.position="fixed";
+    w.style.inset="0";
+    w.style.background="#000";
+    w.style.padding="20px";
+    w.append(a,document.createElement("br"),d);
+    document.body.appendChild(w);
+  }else alert("Wrong password");
 }
 </script>
 

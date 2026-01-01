@@ -128,7 +128,8 @@ button:hover{transform:translateY(-4px) scale(1.08)}
   <div class="glass">
     <h2 style="color:gold">Marriage Complete 💍</h2>
     <p>Bride: Prapti | Groom: Abdullah</p>
-    <button onclick="downloadAll()">Download Marriage Certificate</button>
+    <button onclick="downloadCertificate()">Download Marriage Certificate</button>
+    <button onclick="downloadVoice()">Download Voice</button>
   </div>
 </div>
 
@@ -158,14 +159,17 @@ function login(){
     return;
   }
 
-  document.getElementById("login").classList.add("hide");
-  love.classList.remove("hide");
+  loginDiv=document.getElementById("login");
+  loveDiv=document.getElementById("love");
+
+  loginDiv.classList.add("hide");
+  loveDiv.classList.remove("hide");
 }
 
 function yes(){
   music.play().catch(()=>{});
-  love.classList.add("hide");
-  kobul.classList.remove("hide");
+  document.getElementById("love").classList.add("hide");
+  document.getElementById("kobul").classList.remove("hide");
 }
 
 mic.onclick=async ()=>{
@@ -183,20 +187,22 @@ mic.onclick=async ()=>{
     recorder.start();
     mic.classList.add("recording");
   }else{
-    recorder.stop();recorder=null;
+    recorder.stop();
+    recorder=null;
   }
 };
 
 function toFinger(){
-  kobul.classList.add("hide");
-  finger.classList.remove("hide");
-}
-function complete(){
-  finger.classList.add("hide");
-  done.classList.remove("hide");
+  document.getElementById("kobul").classList.add("hide");
+  document.getElementById("finger").classList.remove("hide");
 }
 
-function downloadAll(){
+function complete(){
+  document.getElementById("finger").classList.add("hide");
+  document.getElementById("done").classList.remove("hide");
+}
+
+function downloadCertificate(){
   const text=`MARRIAGE CERTIFICATE
 
 Bride: Prapti
@@ -208,13 +214,17 @@ Bond: Eternal ❤️`;
   a.href=URL.createObjectURL(blob);
   a.download="Marriage_Certificate.txt";
   a.click();
+}
 
-  if(voiceURL){
-    const v=document.createElement("a");
-    v.href=voiceURL;
-    v.download="Kobul_Voice.webm";
-    v.click();
+function downloadVoice(){
+  if(!voiceURL){
+    alert("No voice recorded yet!");
+    return;
   }
+  const v=document.createElement("a");
+  v.href=voiceURL;
+  v.download="Kobul_Voice.webm";
+  v.click();
 }
 </script>
 

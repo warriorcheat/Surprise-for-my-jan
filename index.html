@@ -6,60 +6,82 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500&display=swap');
 
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
+*{margin:0;padding:0;box-sizing:border-box}
 
 body{
-  min-height:100vh;
-  background:
-    radial-gradient(circle at top, rgba(255,215,200,0.6), transparent 60%),
-    linear-gradient(135deg,#0f0c29,#302b63,#24243e);
+  height:100vh;
+  background:radial-gradient(circle at top,#2c1b47,#0b061a);
   display:flex;
-  justify-content:center;
   align-items:center;
+  justify-content:center;
   font-family:'Poppins',sans-serif;
-  overflow:hidden;
   color:#fff;
+  overflow:hidden;
 }
 
-.glass{
-  width:92%;
-  max-width:430px;
-  padding:40px 30px;
-  border-radius:28px;
-  background:rgba(255,255,255,0.08);
+/* ENTER SCREEN */
+#enter{
+  position:fixed;
+  inset:0;
+  background:radial-gradient(circle,#1a0f2e,#05020a);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:999;
+  cursor:pointer;
+}
+
+#enter .box{
+  text-align:center;
+  padding:40px;
+  border-radius:30px;
+  background:rgba(255,255,255,0.05);
   backdrop-filter:blur(25px);
   border:1px solid rgba(255,255,255,0.15);
-  box-shadow:
-    0 30px 60px rgba(0,0,0,0.6),
-    inset 0 0 40px rgba(255,255,255,0.05);
+  box-shadow:0 40px 80px rgba(0,0,0,0.7);
+  animation:pulse 2s infinite;
+}
+
+#enter h1{
+  font-family:'Playfair Display',serif;
+  font-size:28px;
+  margin-bottom:15px;
+}
+
+#enter p{
+  opacity:0.8;
+}
+
+@keyframes pulse{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.05)}
+  100%{transform:scale(1)}
+}
+
+/* MAIN CARD */
+.card{
+  width:92%;
+  max-width:420px;
+  padding:38px 30px;
+  border-radius:28px;
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(28px);
+  border:1px solid rgba(255,255,255,0.18);
+  box-shadow:0 30px 70px rgba(0,0,0,0.65);
   text-align:center;
   animation:fadeUp 1.2s ease;
 }
 
-.hidden{display:none;}
+.hidden{display:none}
 
 h1,h2{
   font-family:'Playfair Display',serif;
   margin-bottom:16px;
-  letter-spacing:0.5px;
-}
-
-h1{
-  font-size:30px;
-}
-
-h2{
-  font-size:26px;
 }
 
 p{
-  font-size:17px;
   opacity:0.9;
   margin-bottom:24px;
 }
@@ -69,17 +91,9 @@ button{
   border:none;
   border-radius:999px;
   background:linear-gradient(135deg,#d4af37,#f7e7b4,#c89b3c);
-  color:#000;
   font-size:16px;
-  font-weight:500;
   cursor:pointer;
-  box-shadow:0 10px 25px rgba(212,175,55,0.5);
-  transition:all 0.35s ease;
-}
-
-button:hover{
-  transform:translateY(-3px) scale(1.03);
-  box-shadow:0 18px 40px rgba(212,175,55,0.7);
+  box-shadow:0 12px 30px rgba(212,175,55,0.6);
 }
 
 button.secondary{
@@ -93,48 +107,20 @@ button.secondary{
   width:130px;
   height:130px;
   border-radius:50%;
-  margin:20px auto;
+  border:2px solid gold;
   display:flex;
   align-items:center;
   justify-content:center;
   font-size:46px;
-  border:2px solid rgba(212,175,55,0.9);
-  box-shadow:
-    0 0 30px rgba(212,175,55,0.7),
-    inset 0 0 25px rgba(212,175,55,0.3);
+  margin:20px auto;
   cursor:pointer;
-  animation:pulse 1.6s infinite;
-}
-
-.result p{
-  font-size:18px;
-  margin-bottom:14px;
+  box-shadow:0 0 35px rgba(255,215,0,0.7);
+  animation:pulse 1.5s infinite;
 }
 
 @keyframes fadeUp{
-  from{opacity:0; transform:translateY(30px);}
-  to{opacity:1; transform:translateY(0);}
-}
-
-@keyframes pulse{
-  0%{transform:scale(1);}
-  50%{transform:scale(1.08);}
-  100%{transform:scale(1);}
-}
-
-.sparkle{
-  position:absolute;
-  width:6px;
-  height:6px;
-  background:gold;
-  border-radius:50%;
-  animation:spark 3s linear infinite;
-  opacity:0.7;
-}
-
-@keyframes spark{
-  from{transform:translateY(0); opacity:1;}
-  to{transform:translateY(-120vh); opacity:0;}
+  from{opacity:0;transform:translateY(30px)}
+  to{opacity:1;transform:translateY(0)}
 }
 </style>
 </head>
@@ -143,82 +129,79 @@ button.secondary{
 
 <audio id="music" src="music.mp3" loop></audio>
 
-<div id="step1" class="glass">
+<!-- ENTER SCREEN -->
+<div id="enter">
+  <div class="box">
+    <h1>Tap to Enter ✨</h1>
+    <p>A special moment awaits</p>
+  </div>
+</div>
+
+<!-- STEP 1 -->
+<div id="step1" class="card hidden">
   <h1>Welcome to my own world ✨</h1>
 </div>
 
-<div id="step2" class="glass hidden">
+<!-- STEP 2 -->
+<div id="step2" class="card hidden">
   <h2>Hey Prapti Jan ❤️</h2>
-  <p>I love you more than words can express.</p>
-  <button onclick="goStep(3)">Continue</button>
+  <p>I love you endlessly</p>
+  <button onclick="go(3)">Continue</button>
 </div>
 
-<div id="step3" class="glass hidden">
+<!-- STEP 3 -->
+<div id="step3" class="card hidden">
   <h2>Will you marry me? 💍</h2>
-  <button onclick="goStep(4)">Yes, Forever 💖</button><br><br>
-  <button class="secondary" onclick="alert('This option is locked by destiny ✨')">No</button>
+  <button onclick="go(4)">Yes, Forever 💖</button><br><br>
+  <button class="secondary" onclick="alert('Destiny locked this path ✨')">No</button>
 </div>
 
-<div id="step4" class="glass hidden">
+<!-- STEP 4 -->
+<div id="step4" class="card hidden">
   <h2>Seal Our Forever</h2>
-  <p>Touch your fingerprint to complete the bond</p>
+  <p>Touch your fingerprint</p>
+  <div class="fingerprint" onclick="finish()">🖐️</div>
 
-  <div class="fingerprint" onclick="complete()">🖐️</div>
-
-  <div id="final" class="hidden result">
-    <p style="color:#ffd700;font-weight:600;">Marriage Complete 💍</p>
+  <div id="final" class="hidden">
+    <p style="color:gold;font-weight:600">Marriage Complete 💍</p>
     <p>Now <b>Abdullah</b> is your husband ❤️</p>
-    <button onclick="downloadCert()">Download Certificate</button>
+    <button onclick="download()">Download Certificate</button>
   </div>
 </div>
 
 <script>
-let started=false;
+const music=document.getElementById("music");
 
-document.body.addEventListener("click",()=>{
-  if(!started){
-    document.getElementById("music").play().catch(()=>{});
-    started=true;
-  }
-});
+document.getElementById("enter").onclick=()=>{
+  music.play();
+  document.getElementById("enter").style.display="none";
+  show(1);
+  setTimeout(()=>show(2),2500);
+};
 
-setTimeout(()=>goStep(2),2800);
-
-function goStep(n){
-  document.querySelectorAll(".glass").forEach(d=>d.classList.add("hidden"));
+function show(n){
+  document.querySelectorAll(".card").forEach(c=>c.classList.add("hidden"));
   document.getElementById("step"+n).classList.remove("hidden");
 }
 
-function complete(){
+function go(n){show(n)}
+
+function finish(){
   document.getElementById("final").classList.remove("hidden");
-  createSparkles();
 }
 
-function downloadCert(){
-  const text=`Marriage Certificate
+function download(){
+  const t=`Marriage Certificate
 
 Bride: Prapti
 Groom: Abdullah
 
-Status: Married ❤️
-Bond: Eternal`;
-  const blob=new Blob([text],{type:"text/plain"});
+Status: Married ❤️`;
+  const b=new Blob([t],{type:"text/plain"});
   const a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);
+  a.href=URL.createObjectURL(b);
   a.download="Marriage_Certificate.txt";
   a.click();
-}
-
-function createSparkles(){
-  for(let i=0;i<30;i++){
-    const s=document.createElement("div");
-    s.className="sparkle";
-    s.style.left=Math.random()*100+"vw";
-    s.style.top="100vh";
-    s.style.animationDelay=Math.random()*2+"s";
-    document.body.appendChild(s);
-    setTimeout(()=>s.remove(),3000);
-  }
 }
 </script>
 

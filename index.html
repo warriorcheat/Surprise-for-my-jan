@@ -2,186 +2,248 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>My Forever ❤️</title>
+<title>Forever Begins ✨</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500&display=swap');
+<!-- PREMIUM FONTS -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
 
+<style>
 *{margin:0;padding:0;box-sizing:border-box}
 
 body{
   height:100vh;
-  background:radial-gradient(circle at top,#2c1b47,#0b061a);
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  overflow:hidden;
+  background:radial-gradient(circle at top,#120b1f,#05020a 70%);
   font-family:'Poppins',sans-serif;
   color:#fff;
-  overflow:hidden;
 }
 
-/* ENTER SCREEN */
+/* ===== PARTICLES ===== */
+.particle{
+  position:absolute;
+  width:6px;
+  height:6px;
+  background:radial-gradient(circle,gold,#ffcc70);
+  border-radius:50%;
+  opacity:.8;
+  animation:float 12s linear infinite;
+}
+
+@keyframes float{
+  from{transform:translateY(110vh) scale(.6)}
+  to{transform:translateY(-20vh) scale(1.2)}
+}
+
+/* ===== ENTER ===== */
 #enter{
   position:fixed;
   inset:0;
   background:radial-gradient(circle,#1a0f2e,#05020a);
   display:flex;
-  align-items:center;
   justify-content:center;
-  z-index:999;
-  cursor:pointer;
+  align-items:center;
+  z-index:1000;
 }
 
-#enter .box{
+.enter-box{
+  padding:50px;
+  border-radius:35px;
+  background:rgba(255,255,255,0.06);
+  backdrop-filter:blur(35px);
+  border:1px solid rgba(255,255,255,.15);
+  box-shadow:0 50px 120px rgba(0,0,0,.9);
   text-align:center;
-  padding:40px;
-  border-radius:30px;
-  background:rgba(255,255,255,0.05);
-  backdrop-filter:blur(25px);
-  border:1px solid rgba(255,255,255,0.15);
-  box-shadow:0 40px 80px rgba(0,0,0,0.7);
-  animation:pulse 2s infinite;
+  animation:breath 3s infinite;
 }
 
-#enter h1{
-  font-family:'Playfair Display',serif;
-  font-size:28px;
-  margin-bottom:15px;
-}
-
-#enter p{
-  opacity:0.8;
-}
-
-@keyframes pulse{
+@keyframes breath{
   0%{transform:scale(1)}
   50%{transform:scale(1.05)}
   100%{transform:scale(1)}
 }
 
-/* MAIN CARD */
+.enter-box h1{
+  font-family:'Playfair Display',serif;
+  font-size:32px;
+  margin-bottom:12px;
+}
+
+.enter-box p{opacity:.8}
+
+/* ===== CARD ===== */
 .card{
+  position:absolute;
+  inset:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.glass{
   width:92%;
-  max-width:420px;
-  padding:38px 30px;
-  border-radius:28px;
-  background:rgba(255,255,255,0.08);
-  backdrop-filter:blur(28px);
-  border:1px solid rgba(255,255,255,0.18);
-  box-shadow:0 30px 70px rgba(0,0,0,0.65);
+  max-width:440px;
+  padding:45px 35px;
+  border-radius:32px;
+  background:linear-gradient(145deg,rgba(255,255,255,.12),rgba(255,255,255,.04));
+  backdrop-filter:blur(40px);
+  border:1px solid rgba(255,255,255,.18);
+  box-shadow:
+    0 40px 90px rgba(0,0,0,.75),
+    inset 0 0 40px rgba(255,255,255,.05);
   text-align:center;
-  animation:fadeUp 1.2s ease;
+  animation:rise 1.6s ease;
 }
 
 .hidden{display:none}
 
+@keyframes rise{
+  from{opacity:0;transform:translateY(60px) scale(.95)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+
 h1,h2{
   font-family:'Playfair Display',serif;
-  margin-bottom:16px;
+  margin-bottom:18px;
 }
+
+h1{font-size:30px}
+h2{font-size:26px}
 
 p{
-  opacity:0.9;
-  margin-bottom:24px;
+  font-size:18px;
+  opacity:.9;
+  margin-bottom:26px;
 }
 
+/* ===== BUTTON ===== */
 button{
-  padding:14px 34px;
+  padding:16px 38px;
   border:none;
   border-radius:999px;
-  background:linear-gradient(135deg,#d4af37,#f7e7b4,#c89b3c);
+  background:linear-gradient(135deg,#d4af37,#fff1b8,#c89b3c);
   font-size:16px;
   cursor:pointer;
-  box-shadow:0 12px 30px rgba(212,175,55,0.6);
+  box-shadow:0 18px 40px rgba(212,175,55,.7);
+  transition:.4s;
+}
+
+button:hover{
+  transform:translateY(-4px) scale(1.05);
+  box-shadow:0 30px 70px rgba(212,175,55,.9);
 }
 
 button.secondary{
   background:transparent;
-  border:1px solid rgba(255,255,255,0.4);
+  border:1px solid rgba(255,255,255,.4);
   color:#fff;
   box-shadow:none;
 }
 
-.fingerprint{
-  width:130px;
-  height:130px;
+/* ===== FINGER ===== */
+.finger{
+  width:140px;
+  height:140px;
   border-radius:50%;
   border:2px solid gold;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:46px;
-  margin:20px auto;
+  font-size:52px;
+  margin:22px auto;
   cursor:pointer;
-  box-shadow:0 0 35px rgba(255,215,0,0.7);
-  animation:pulse 1.5s infinite;
+  box-shadow:
+    0 0 45px rgba(255,215,0,.8),
+    inset 0 0 35px rgba(255,215,0,.4);
+  animation:pulse 1.4s infinite;
 }
 
-@keyframes fadeUp{
-  from{opacity:0;transform:translateY(30px)}
-  to{opacity:1;transform:translateY(0)}
+@keyframes pulse{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.12)}
+  100%{transform:scale(1)}
 }
 </style>
 </head>
 
 <body>
 
-<audio id="music" src="music.mp3" loop></audio>
+<!-- RAW MUSIC -->
+<audio id="music" loop preload="auto">
+  <source src="https://github.com/warriorcheat/Surprise-for-my-jan/raw/refs/heads/main/music.mp3" type="audio/mpeg">
+</audio>
 
-<!-- ENTER SCREEN -->
+<!-- ENTER -->
 <div id="enter">
-  <div class="box">
-    <h1>Tap to Enter ✨</h1>
-    <p>A special moment awaits</p>
+  <div class="enter-box" onclick="start()">
+    <h1>Tap to Begin ✨</h1>
+    <p>A cinematic love story</p>
   </div>
 </div>
 
 <!-- STEP 1 -->
-<div id="step1" class="card hidden">
-  <h1>Welcome to my own world ✨</h1>
+<div class="card hidden" id="s1">
+  <div class="glass">
+    <h1>Welcome to my world ✨</h1>
+  </div>
 </div>
 
 <!-- STEP 2 -->
-<div id="step2" class="card hidden">
-  <h2>Hey Prapti Jan ❤️</h2>
-  <p>I love you endlessly</p>
-  <button onclick="go(3)">Continue</button>
+<div class="card hidden" id="s2">
+  <div class="glass">
+    <h2>Hey Prapti Jan ❤️</h2>
+    <p>Every heartbeat whispers your name</p>
+    <button onclick="go(3)">Continue</button>
+  </div>
 </div>
 
 <!-- STEP 3 -->
-<div id="step3" class="card hidden">
-  <h2>Will you marry me? 💍</h2>
-  <button onclick="go(4)">Yes, Forever 💖</button><br><br>
-  <button class="secondary" onclick="alert('Destiny locked this path ✨')">No</button>
+<div class="card hidden" id="s3">
+  <div class="glass">
+    <h2>Will you marry me? 💍</h2>
+    <button onclick="go(4)">Yes, Forever 💖</button><br><br>
+    <button class="secondary" onclick="alert('Destiny sealed this path ✨')">No</button>
+  </div>
 </div>
 
 <!-- STEP 4 -->
-<div id="step4" class="card hidden">
-  <h2>Seal Our Forever</h2>
-  <p>Touch your fingerprint</p>
-  <div class="fingerprint" onclick="finish()">🖐️</div>
-
-  <div id="final" class="hidden">
-    <p style="color:gold;font-weight:600">Marriage Complete 💍</p>
-    <p>Now <b>Abdullah</b> is your husband ❤️</p>
-    <button onclick="download()">Download Certificate</button>
+<div class="card hidden" id="s4">
+  <div class="glass">
+    <h2>Seal Our Forever</h2>
+    <p>Touch your fingerprint</p>
+    <div class="finger" onclick="finish()">🖐️</div>
+    <div id="final" class="hidden">
+      <p style="color:gold;font-weight:600">Marriage Complete 💍</p>
+      <p>Now <b>Abdullah</b> is your husband ❤️</p>
+      <button onclick="download()">Download Certificate</button>
+    </div>
   </div>
 </div>
 
 <script>
 const music=document.getElementById("music");
 
-document.getElementById("enter").onclick=()=>{
-  music.play();
+/* PARTICLES */
+for(let i=0;i<40;i++){
+  const p=document.createElement("div");
+  p.className="particle";
+  p.style.left=Math.random()*100+"vw";
+  p.style.animationDelay=Math.random()*8+"s";
+  p.style.opacity=Math.random();
+  document.body.appendChild(p);
+}
+
+function start(){
+  music.volume=.85;
+  music.play().catch(()=>{});
   document.getElementById("enter").style.display="none";
   show(1);
-  setTimeout(()=>show(2),2500);
-};
+  setTimeout(()=>show(2),2600);
+}
 
 function show(n){
   document.querySelectorAll(".card").forEach(c=>c.classList.add("hidden"));
-  document.getElementById("step"+n).classList.remove("hidden");
+  document.getElementById("s"+n).classList.remove("hidden");
 }
 
 function go(n){show(n)}
@@ -196,7 +258,8 @@ function download(){
 Bride: Prapti
 Groom: Abdullah
 
-Status: Married ❤️`;
+Status: Married ❤️
+Bond: Eternal`;
   const b=new Blob([t],{type:"text/plain"});
   const a=document.createElement("a");
   a.href=URL.createObjectURL(b);

@@ -61,7 +61,7 @@ button{
 <body>
 
 <audio id="music" loop preload="auto" playsinline>
-  <source src="https://github.com/warriorcheat/Surprise-for-my-jan/raw/refs/heads/main/music.mp3">
+  <source src="https://github.com/warriorcheat/Surprise-for-my-jan/raw/refs/heads/main/music.mp3" type="audio/mpeg">
 </audio>
 
 <!-- STEP 1 -->
@@ -103,24 +103,10 @@ button{
 
 <div class="key" onclick="openAdmin()">🔑</div>
 
-<!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
 <script>
-firebase.initializeApp({
-  apiKey: "AIzaSyCXXYQnIt8ovhEidRTx-B3S0k9DZV1oi7M",
-  authDomain: "for-my-love-5c7c1.firebaseapp.com",
-  projectId: "for-my-love-5c7c1",
-  storageBucket: "for-my-love-5c7c1.firebasestorage.app"
-});
-
-const db=firebase.firestore();
-const storage=firebase.storage();
 const music=document.getElementById("music");
-
-let recorder,stream,chunks=[];
+let recorder,chunks=[];
+let voices=JSON.parse(localStorage.getItem("voices")||"[]");
 
 function yes(){
   music.play().catch(()=>{});
@@ -128,35 +114,28 @@ function yes(){
   kobul.classList.remove("hide");
 }
 
-/* RECORD + CLOUD SAVE */
-mic.onclick=async()=>{
+/* MULTI VOICE RECORD */
+mic.onclick=async ()=>{
   if(!recorder){
-    stream=await navigator.mediaDevices.getUserMedia({audio:true});
+    const stream=await navigator.mediaDevices.getUserMedia({audio:true});
     recorder=new MediaRecorder(stream);
     recorder.ondataavailable=e=>chunks.push(e.data);
-    recorder.onstop=saveVoice;
+    recorder.onstop=()=>{
+      const blob=new Blob(chunks,{type:"audio/webm"});
+      chunks=[];
+      const url=URL.createObjectURL(blob);
+      voices.push({url,time:new Date().toLocaleString()});
+      localStorage.setItem("voices",JSON.stringify(voices));
+      mic.innerText="✔️";
+      mic.classList.remove("recording");
+    };
     recorder.start();
     mic.classList.add("recording");
   }else{
     recorder.stop();
-    stream.getTracks().forEach(t=>t.stop());
     recorder=null;
-    mic.classList.remove("recording");
   }
 };
-
-async function saveVoice(){
-  const blob=new Blob(chunks,{type:"audio/webm"});
-  chunks=[];
-  const ref=storage.ref("voices/"+Date.now()+".webm");
-  await ref.put(blob);
-  const url=await ref.getDownloadURL();
-  await db.collection("voices").add({
-    url,
-    time:new Date().toLocaleString()
-  });
-  mic.innerText="✔️";
-}
 
 function toFinger(){
   kobul.classList.add("hide");
@@ -182,26 +161,25 @@ Bond: Eternal ❤️`;
   a.click();
 }
 
-/* ADMIN – CLOUD VOICE LIST */
+/* ADMIN PANEL */
 function openAdmin(){
-  if(prompt("Admin Password")!=="112211") return alert("Wrong password");
+  const p=prompt("Admin Password:");
+  if(p!=="112211"){alert("Wrong password");return;}
   const panel=document.createElement("div");
   panel.className="admin";
-  panel.innerHTML="<h2>Saved Voice List (Cloud)</h2>";
-  db.collection("voices").orderBy("time","desc").onSnapshot(snap=>{
-    panel.innerHTML="<h2>Saved Voice List (Cloud)</h2>";
-    snap.forEach(doc=>{
-      const v=doc.data();
-      const d=document.createElement("div");
-      d.className="voiceItem";
-      d.innerHTML=`
-        <p>${v.time}</p>
-        <audio controls src="${v.url}"></audio><br>
-        <a href="${v.url}" download>Download</a>
-      `;
-      panel.appendChild(d);
-    });
+  panel.innerHTML="<h2>Saved Voice List</h2>";
+
+  voices.forEach((v,i)=>{
+    const d=document.createElement("div");
+    d.className="voiceItem";
+    d.innerHTML=`
+      <p>Voice ${i+1} (${v.time})</p>
+      <audio controls src="${v.url}"></audio><br>
+      <a href="${v.url}" download="kobul_${i+1}.webm">Download</a>
+    `;
+    panel.appendChild(d);
   });
+
   const close=document.createElement("button");
   close.innerText="Close";
   close.onclick=()=>panel.remove();

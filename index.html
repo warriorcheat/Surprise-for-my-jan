@@ -17,7 +17,7 @@ body{
   overflow:hidden;
 }
 
-/* ===== BACKGROUND LIGHT ===== */
+/* glow */
 .bg-glow{
   position:absolute;
   inset:-20%;
@@ -26,7 +26,7 @@ body{
 }
 @keyframes rotate{to{transform:rotate(360deg)}}
 
-/* ===== PARTICLES ===== */
+/* particles */
 .particle{
   position:absolute;
   width:6px;height:6px;border-radius:50%;
@@ -38,7 +38,7 @@ body{
   to{transform:translateY(-20vh) scale(1.2)}
 }
 
-/* ===== CARD ===== */
+/* card */
 .card{
   position:absolute;
   inset:0;
@@ -65,15 +65,10 @@ body{
   text-align:center;
 }
 
-h1,h2{
-  font-family:'Playfair Display';
-  margin-bottom:18px;
-}
-h1{font-size:32px}
-h2{font-size:26px}
+h1,h2{font-family:'Playfair Display';margin-bottom:18px}
 p{opacity:.9;margin-bottom:22px;font-size:17px}
 
-/* ===== BUTTON ===== */
+/* buttons */
 button{
   padding:16px 42px;
   border-radius:999px;
@@ -87,10 +82,9 @@ button{
 }
 button:hover{
   transform:translateY(-4px) scale(1.08);
-  box-shadow:0 30px 80px rgba(212,175,55,1);
 }
 
-/* ===== ICON BUTTONS ===== */
+/* icons */
 .voice,.finger{
   width:130px;height:130px;
   border-radius:50%;
@@ -103,19 +97,8 @@ button:hover{
   cursor:pointer;
   animation:pulse 1.4s infinite;
 }
-@keyframes pulse{
-  50%{transform:scale(1.12)}
-}
+@keyframes pulse{50%{transform:scale(1.12)}}
 .recording{background:red}
-
-/* ===== ADMIN ===== */
-.key{
-  position:fixed;
-  bottom:12px;right:12px;
-  font-size:26px;
-  opacity:.7;
-  cursor:pointer;
-}
 </style>
 </head>
 
@@ -123,7 +106,6 @@ button:hover{
 
 <div class="bg-glow"></div>
 
-<!-- MUSIC -->
 <audio id="music" loop preload="auto" playsinline>
   <source src="https://github.com/warriorcheat/Surprise-for-my-jan/raw/refs/heads/main/music.mp3" type="audio/mpeg">
 </audio>
@@ -134,7 +116,7 @@ button:hover{
     <h1>I love you my Jan Prapti ❤️</h1>
     <h2>Will you marry me?</h2>
     <button onclick="yes()">Yes 💍</button>
-    <button onclick="no()">No ❌</button>
+    <button onclick="alert('Destiny already chose us ❤️')">No ❌</button>
   </div>
 </div>
 
@@ -152,7 +134,6 @@ button:hover{
 <div class="card hide" id="finger">
   <div class="glass">
     <h2>Place Your Finger 🖐️</h2>
-    <p>Seal our forever</p>
     <div class="finger" onclick="complete()">🖐️</div>
   </div>
 </div>
@@ -162,16 +143,14 @@ button:hover{
   <div class="glass">
     <h2 style="color:gold">Marriage Complete 💍</h2>
     <p><b>Abdullah</b> & <b>Prapti</b></p>
-    <button onclick="download()">Download Marriage Certificate</button>
+    <button onclick="downloadAll()">Download Marriage Certificate</button>
   </div>
 </div>
-
-<div class="key" onclick="admin()">🔑</div>
 
 <script>
 /* particles */
 for(let i=0;i<45;i++){
-  let p=document.createElement("div");
+  const p=document.createElement("div");
   p.className="particle";
   p.style.left=Math.random()*100+"vw";
   p.style.animationDelay=Math.random()*8+"s";
@@ -180,18 +159,15 @@ for(let i=0;i<45;i++){
 
 const music=document.getElementById("music");
 let recorder,chunks=[];
+let voiceURL=null;
 
-/* step handlers */
 function yes(){
   music.play().catch(()=>{});
   love.classList.add("hide");
   kobul.classList.remove("hide");
 }
-function no(){
-  alert("Destiny already chose us ❤️");
-}
 
-/* voice */
+/* voice record */
 mic.onclick=async ()=>{
   if(!recorder){
     const stream=await navigator.mediaDevices.getUserMedia({audio:true});
@@ -200,7 +176,7 @@ mic.onclick=async ()=>{
     recorder.onstop=()=>{
       const blob=new Blob(chunks,{type:"audio/webm"});
       chunks=[];
-      localStorage.setItem("voice",URL.createObjectURL(blob));
+      voiceURL=URL.createObjectURL(blob);
       mic.innerText="✔️";
       mic.classList.remove("recording");
     };
@@ -221,8 +197,8 @@ function complete(){
   done.classList.remove("hide");
 }
 
-/* certificate */
-function download(){
+/* download certificate + voice */
+function downloadAll(){
   const text=`MARRIAGE CERTIFICATE
 
 Bride: Prapti
@@ -234,27 +210,13 @@ Bond: Eternal ❤️`;
   a.href=URL.createObjectURL(blob);
   a.download="Marriage_Certificate.txt";
   a.click();
-}
 
-/* admin */
-function admin(){
-  const p=prompt("Admin Password:");
-  if(p==="112211"){
-    const v=localStorage.getItem("voice");
-    if(!v){alert("No voice recorded");return;}
-    const a=document.createElement("audio");
-    a.src=v;a.controls=true;
-    const d=document.createElement("a");
-    d.href=v;d.download="kobul_voice.webm";
-    d.innerText="Download Voice";
-    const w=document.createElement("div");
-    w.style.position="fixed";
-    w.style.inset="0";
-    w.style.background="#000";
-    w.style.padding="20px";
-    w.append(a,document.createElement("br"),d);
-    document.body.appendChild(w);
-  }else alert("Wrong password");
+  if(voiceURL){
+    const v=document.createElement("a");
+    v.href=voiceURL;
+    v.download="Kobul_Voice.webm";
+    v.click();
+  }
 }
 </script>
 

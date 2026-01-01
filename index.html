@@ -28,8 +28,8 @@ body{
   animation:float 14s linear infinite;
 }
 @keyframes float{
-  from{transform:translateY(110vh) scale(.6)}
-  to{transform:translateY(-20vh) scale(1.2)}
+  from{transform:translateY(110vh)}
+  to{transform:translateY(-20vh)}
 }
 .card{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
 .hide{display:none}
@@ -47,28 +47,22 @@ button{
   padding:16px 42px;border-radius:999px;border:none;
   background:linear-gradient(135deg,#d4af37,#fff1b8,#c89b3c);
   box-shadow:0 20px 50px rgba(212,175,55,.85);
-  cursor:pointer;margin:6px;transition:.4s;
+  cursor:pointer;margin:6px;
 }
-button:hover{transform:translateY(-4px) scale(1.08)}
 .voice{
   width:130px;height:130px;border-radius:50%;
   border:2px solid gold;
   font-size:50px;
   display:flex;align-items:center;justify-content:center;
   margin:20px auto;cursor:pointer;
-  animation:pulse 1.4s infinite;
 }
-@keyframes pulse{50%{transform:scale(1.12)}}
 .recording{background:red}
-.key{
-  position:fixed;bottom:12px;right:12px;
-  font-size:26px;cursor:pointer;opacity:.7
-}
+.key{position:fixed;bottom:12px;right:12px;font-size:26px;cursor:pointer}
 .admin{
   position:fixed;inset:0;background:#000;
   overflow:auto;padding:20px;z-index:9999
 }
-.voice-item{margin:12px 0}
+.voice-item{margin:15px 0}
 </style>
 </head>
 
@@ -80,39 +74,27 @@ button:hover{transform:translateY(-4px) scale(1.08)}
   <source src="https://github.com/warriorcheat/Surprise-for-my-jan/raw/refs/heads/main/music.mp3">
 </audio>
 
-<!-- STEP 1 -->
 <div class="card" id="love">
   <div class="glass">
     <h1>I love you my Jan Prapti ❤️</h1>
     <h2>Will you marry me?</h2>
     <button onclick="yes()">Yes 💍</button>
-    <button onclick="no()">No ❌</button>
   </div>
 </div>
 
-<!-- STEP 2 -->
 <div class="card hide" id="kobul">
   <div class="glass">
     <h2>Say Kobul ❤️</h2>
     <p id="status">Press mic & speak</p>
     <div class="voice" id="mic">🎤</div>
-    <button onclick="toFinger()">Continue</button>
+    <button onclick="finish()">Continue</button>
   </div>
 </div>
 
-<!-- STEP 3 -->
-<div class="card hide" id="finger">
-  <div class="glass">
-    <h2>Place Your Finger 🖐️</h2>
-    <div class="voice" onclick="complete()">🖐️</div>
-  </div>
-</div>
-
-<!-- STEP 4 -->
 <div class="card hide" id="done">
   <div class="glass">
     <h2 style="color:gold">Marriage Complete 💍</h2>
-    <p>Abdullah ❤️ Prapti</p>
+    <button onclick="downloadPDF()">Download Certificate</button>
   </div>
 </div>
 
@@ -122,9 +104,10 @@ button:hover{transform:translateY(-4px) scale(1.08)}
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <script>
-for(let i=0;i<45;i++){
+for(let i=0;i<40;i++){
   let p=document.createElement("div");
   p.className="particle";
   p.style.left=Math.random()*100+"vw";
@@ -132,19 +115,18 @@ for(let i=0;i<45;i++){
   document.body.appendChild(p);
 }
 
-/* Firebase init */
+/* Firebase */
 firebase.initializeApp({
   apiKey:"AIzaSyCXXYQnIt8ovhEidRTx-B3S0k9DZV1oi7M",
   authDomain:"for-my-love-5c7c1.firebaseapp.com",
   projectId:"for-my-love-5c7c1",
   storageBucket:"for-my-love-5c7c1.firebasestorage.app"
 });
-const storage=firebase.storage();
 const db=firebase.firestore();
+const storage=firebase.storage();
 
-let recorder,stream,chunks=[];
+let recorder,stream,chunks=[],recorded=false;
 
-/* Mic logic – FIXED */
 mic.onclick=async()=>{
   if(!recorder){
     stream=await navigator.mediaDevices.getUserMedia({audio:true});
@@ -159,7 +141,6 @@ mic.onclick=async()=>{
     stream.getTracks().forEach(t=>t.stop());
     recorder=null;
     mic.classList.remove("recording");
-    status.innerText="Saving...";
   }
 };
 
@@ -169,47 +150,57 @@ async function saveVoice(){
   const ref=storage.ref("voices/"+Date.now()+".webm");
   await ref.put(blob);
   const url=await ref.getDownloadURL();
-  await db.collection("voices").add({
-    url:url,
-    time:firebase.firestore.FieldValue.serverTimestamp()
-  });
+  await db.collection("voices").add({url,time:Date.now()});
+  mic.innerText="✔️";
   status.innerText="Saved ❤️";
 }
 
-/* Flow */
 function yes(){
   music.play().catch(()=>{});
   love.classList.add("hide");
   kobul.classList.remove("hide");
 }
-function no(){alert("Destiny already chose us ❤️")}
-function toFinger(){
+function finish(){
   kobul.classList.add("hide");
-  finger.classList.remove("hide");
-}
-function complete(){
-  finger.classList.add("hide");
   done.classList.remove("hide");
 }
 
-/* ADMIN – FIXED voice list */
-async function openAdmin(){
+function downloadPDF(){
+  const {jsPDF}=window.jspdf;
+  const pdf=new jsPDF();
+  pdf.text("Marriage Certificate",60,40);
+  pdf.text("Groom: Abdullah",20,70);
+  pdf.text("Bride: Prapti",20,90);
+  pdf.text("Bond: Eternal Love ❤️",20,120);
+  pdf.save("Marriage_Certificate.pdf");
+}
+
+/* ADMIN – realtime + delete */
+function openAdmin(){
   if(prompt("Admin PIN")!=="112211") return alert("Wrong PIN");
   const panel=document.createElement("div");
   panel.className="admin";
   panel.innerHTML="<h2>Admin Panel</h2>";
-  const snap=await db.collection("voices").orderBy("time","desc").get();
-  snap.forEach(doc=>{
-    const d=document.createElement("div");
-    d.className="voice-item";
-    d.innerHTML=`
-      <audio controls src="${doc.data().url}"></audio><br>
-      <a href="${doc.data().url}" download>Download</a>
-    `;
-    panel.appendChild(d);
+  db.collection("voices").onSnapshot(snap=>{
+    panel.innerHTML="<h2>Admin Panel</h2>";
+    snap.forEach(doc=>{
+      const d=document.createElement("div");
+      d.className="voice-item";
+      d.innerHTML=`
+        <audio controls src="${doc.data().url}"></audio><br>
+        <button onclick="window.open('${doc.data().url}')">Download</button>
+        <button onclick="deleteVoice('${doc.id}','${doc.data().url}')">Delete</button>
+      `;
+      panel.appendChild(d);
+    });
   });
   panel.onclick=e=>{if(e.target===panel)panel.remove()}
   document.body.appendChild(panel);
+}
+
+async function deleteVoice(id,url){
+  await db.collection("voices").doc(id).delete();
+  await storage.refFromURL(url).delete();
 }
 </script>
 </body>

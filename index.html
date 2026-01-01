@@ -16,16 +16,12 @@ body{
   color:#fff;
   overflow:hidden;
 }
-
-/* glow */
 .bg-glow{
   position:absolute;inset:-20%;
   background:radial-gradient(circle at center,rgba(255,215,0,.15),transparent 60%);
   animation:rotate 40s linear infinite;
 }
 @keyframes rotate{to{transform:rotate(360deg)}}
-
-/* particles */
 .particle{
   position:absolute;width:6px;height:6px;border-radius:50%;
   background:radial-gradient(circle,#ffd27d,#c89b3c);
@@ -35,8 +31,6 @@ body{
   from{transform:translateY(110vh) scale(.6)}
   to{transform:translateY(-20vh) scale(1.2)}
 }
-
-/* card */
 .card{
   position:absolute;inset:0;
   display:flex;align-items:center;justify-content:center;
@@ -47,7 +41,6 @@ body{
   to{opacity:1;transform:none}
 }
 .hide{display:none}
-
 .glass{
   width:92%;max-width:480px;
   padding:45px;border-radius:34px;
@@ -57,18 +50,14 @@ body{
   box-shadow:0 40px 120px rgba(0,0,0,.9);
   text-align:center;
 }
-
 h1,h2{font-family:'Playfair Display';margin-bottom:18px}
 p{opacity:.9;margin-bottom:22px;font-size:17px}
-
 input{
   width:100%;padding:14px;
   border-radius:999px;border:none;
   text-align:center;font-size:16px;
   margin-bottom:16px;
 }
-
-/* button */
 button{
   padding:16px 42px;border-radius:999px;border:none;
   background:linear-gradient(135deg,#d4af37,#fff1b8,#c89b3c);
@@ -77,8 +66,6 @@ button{
   margin:6px;transition:.4s;
 }
 button:hover{transform:translateY(-4px) scale(1.08)}
-
-/* icons */
 .voice,.finger{
   width:130px;height:130px;border-radius:50%;
   border:2px solid gold;font-size:50px;
@@ -113,7 +100,7 @@ button:hover{transform:translateY(-4px) scale(1.08)}
 <div class="card hide" id="love">
   <div class="glass">
     <h1 id="welcomeText"></h1>
-    <h2>Will you marry me?</h2>
+    <h2 id="questionText"></h2>
     <button onclick="yes()">Yes 💍</button>
     <button onclick="alert('Destiny already chose us ❤️')">No ❌</button>
   </div>
@@ -140,13 +127,12 @@ button:hover{transform:translateY(-4px) scale(1.08)}
 <div class="card hide" id="done">
   <div class="glass">
     <h2 style="color:gold">Marriage Complete 💍</h2>
-    <p id="finalNames"></p>
+    <p>Bride: Prapti | Groom: Abdullah</p>
     <button onclick="downloadAll()">Download Marriage Certificate</button>
   </div>
 </div>
 
 <script>
-/* particles */
 for(let i=0;i<45;i++){
   const p=document.createElement("div");
   p.className="particle";
@@ -157,26 +143,23 @@ for(let i=0;i<45;i++){
 
 const music=document.getElementById("music");
 let recorder,chunks=[],voiceURL=null;
-let role="";
 
 function login(){
-  const u=document.getElementById("username").value.trim();
-  if(u==="Prapti"){
-    role="Bride";
-  }else if(u==="Abdullah"){
-    role="Groom";
+  const u=document.getElementById("username").value.trim().toLowerCase();
+
+  if(u==="abdullah"){
+    welcomeText.innerText="Welcome Abdullah ❤️";
+    questionText.innerText="Will you marry Preeti?";
+  }else if(u==="prapti"){
+    welcomeText.innerText="Welcome Prapti ❤️";
+    questionText.innerText="Will you marry Abdullah?";
   }else{
     alert("Invalid username");
     return;
   }
-  loginDiv=document.getElementById("login");
-  loginDiv.classList.add("hide");
-  love.classList.remove("hide");
 
-  welcomeText.innerText =
-    role==="Bride"
-    ? "Welcome Bride Prapti ❤️"
-    : "Welcome Groom Abdullah ❤️";
+  document.getElementById("login").classList.add("hide");
+  love.classList.remove("hide");
 }
 
 function yes(){
@@ -185,7 +168,6 @@ function yes(){
   kobul.classList.remove("hide");
 }
 
-/* voice */
 mic.onclick=async ()=>{
   if(!recorder){
     const stream=await navigator.mediaDevices.getUserMedia({audio:true});
@@ -212,10 +194,8 @@ function toFinger(){
 function complete(){
   finger.classList.add("hide");
   done.classList.remove("hide");
-  finalNames.innerText="Bride: Prapti  |  Groom: Abdullah";
 }
 
-/* download */
 function downloadAll(){
   const text=`MARRIAGE CERTIFICATE
 
